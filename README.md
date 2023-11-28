@@ -11,7 +11,7 @@
 LLaMA-VID empowers existing frameworks to support hour-long videos and pushes their upper limit with an extra context token. We build this repo based on LLaVA.
 
 ## Release
-- [11/29] 🔥 LLaMA-VID is comming! We release the [paper](), [code](https://github.com/dvlab-research/LLaMA-VID), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), [models](https://huggingface.co/YanweiLi), and [demo](https://llama-vid.github.io/) for LLaMA-VID. Welcome to check them out!
+- [11/29] 🔥 LLaMA-VID is comming! We release the [paper](), [code](https://github.com/dvlab-research/LLaMA-VID), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), [models](https://huggingface.co/YanweiLi), and [demo](https://llama-vid.github.io/) for LLaMA-VID!
 
 ## Contents
 - [Demo](#demo)
