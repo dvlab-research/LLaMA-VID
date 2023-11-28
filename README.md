@@ -170,18 +170,18 @@ You can also try that with a smaller image size 224 and less visual tokens:
 ```bash
 bash scripts/image_only/train/stage_1_2_full_v7b_224_grid_4.sh
 ```
-Please find more training scripts in `scripts/image_only`.
+Please find more training scripts in `scripts/image_only/train`.
 
 ### Short Video
 If you are interested in training and finetuning LLaMA-VID on short video-based data, please run the following command for Vicuna-7B with image size 224:
 ```bash
-bash scripts/video/stage_1_2_full_v7b_224_fps_1.sh
+bash scripts/video/train/stage_1_2_full_v7b_224_fps_1.sh
 ```
 or for Vicuna-13B with image size 224:
 ```bash
-bash scripts/video/stage_1_2_full_v13b_224_fps_1.sh
+bash scripts/video/train/stage_1_2_full_v13b_224_fps_1.sh
 ```
-Please find more training scripts in `scripts/video`.
+Please find more training scripts in `scripts/video/train`.
 
 
 ## Evaluation
