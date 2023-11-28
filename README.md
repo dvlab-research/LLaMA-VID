@@ -29,7 +29,7 @@ LLaMA-VID empowers existing frameworks to support hour-long videos and pushes th
 We provide some selected examples in this section. More examples can be found in our [project page](https://llama-vid.github.io/). Feel free to try our online [demo](https://llama-vid.github.io/)!
 
 <div align=center>
-<img width="90%" src="demos/demo.png"/>
+<img width="100%" src="demos/demo.png"/>
 </div>
 
 ## Install
@@ -60,7 +60,7 @@ context token and content token are transformed with the tailored token generati
 instruction tuning is designed to unleash the potential of LLMs for image and video.
 
 <div align=center>
-<img width="90%" src="images/overview.png"/>
+<img width="100%" src="images/overview.png"/>
 </div>
 
 We provide all our fully finetuned models on Stage 1 and 2 data (Long Video + Stage 3) for LLaMA-VID:
