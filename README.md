@@ -1,8 +1,7 @@
 # LLaMA-VID: An Image is Worth 2 Tokens in Large Language Models
 
-[[Project Page](https://llama-vid.github.io/)] [[Demo](https://llama-vid.github.io/)]  [[Data]()] [[Model Zoo]()]
-
 <a href='https://llama-vid.github.io/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
+<a href='https://llama-vid.github.io/'><img src='https://img.shields.io/badge/Project-Demo-violet'></a>
 <a href=''><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a>
 <a href='https://huggingface.co/YanweiLi'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-blue'></a>
 <a href='https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Data-green'></a>
