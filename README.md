@@ -20,6 +20,7 @@ LLaMA-VID empowers existing frameworks to support hour-long videos and pushes th
 - [Preparation](#preparation)
 - [Train](#train)
 - [Evaluation](#evaluation)
+- [Examples](#examples)
 - [TODO](#todo)
 - [Citation](#citation)
 - [Acknowledgement](#acknowledgement)
@@ -240,6 +241,13 @@ python -m llamavid.serve.cli \
     --image-file <path to your video>
     --load-4bit
 ```
+
+## Examples
+We provide some examples in this section. More examples can be found in our [project page](https://llama-vid.github.io/).
+
+<div align=center>
+<img width="100%" src="demos/demo_movie.png"/>
+</div>
 
 ## TODO
 - [ ] Release all finetuned weights.
