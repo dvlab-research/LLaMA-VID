@@ -67,12 +67,12 @@ We provide all our fully finetuned models on Stage 1 and 2 data (Long Video + St
 
 | Type | Image Size | Max Token | Base LLM | Vision Encoder | Finetuning Data | Finetuning schedule | Download |
 |----------|----------|----------|----------|----------------|---------------|--------------------|------------------|
-Image only | 224 | 4K | Vicuna-7B-v1.5 | EVA-G | LLaVA1.5-Instruct | full_ft-1e | [uploading]() |
+Image only | 224 | 4K | Vicuna-7B-v1.5 | EVA-G | LLaVA1.5-Instruct | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-7b-full-224) |
 Image only | 336 | 4K | Vicuna-7B-v1.5 | EVA-G | LLaVA1.5-Instruct | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-7b-full-336) |
-Image only | 336 | 4K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-Instruct | full_ft-1e | [uploading]() |
-Short video | 224 | 4K | Vicuna-7B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct | full_ft-1e | [uploading]() |
-Short video | 224 | 4K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct | full_ft-1e | [uploading]() |
-Long video | 224 | 64K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct + LongVideoQA | full_ft-1e | [uploading]() |
+Image only | 336 | 4K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-Instruct | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-13b-full-336) |
+Short video | 224 | 4K | Vicuna-7B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-7b-full-224-video-fps-1) |
+Short video | 224 | 4K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-13b-full-224-video-fps-1) |
+Long video | 224 | 64K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct + LongVideoQA | full_ft-1e | comming |
 
 Here are the pretrained weights (text decoder + context attention + projector) on Stage 1 data only:
 | Type | Image Size | Max Token | Base LLM | Vision Encoder | Pretrain Data | Pretraining schedule | Download |
@@ -188,6 +188,14 @@ Please find more training scripts in `scripts/video/train`.
 We perform evaluation on both image-based and video-based benchmarks. Please download the evaluation data following [Preparation](#preparation) and organize them as in [Structure](#structure).
 
 ### Image Only
+| LLM | Res. | Model | GQA | MMB | MME | POPE | SEED | SQA-Image | VizWiz | VQA v2 |
+|----------|----------|-----------|---|---|---|---|---|---|---|---|
+Vicuna-7B | 224 | [llama-vid-7b-full-224](https://huggingface.co/YanweiLi/llama-vid-7b-full-224) | 63.0 | 65.3 | 1405.6 | 86.6 | 59.7 | 67.7 | 52.5 | - |
+Vicuna-7B | 336 | [llama-vid-7b-full-336](https://huggingface.co/YanweiLi/llama-vid-7b-full-336) | 64.3 | 65.1 | 1521.4 | 86.0 | 59.9 | 68.3 | 54.2 | 79.3 |
+Vicuna-13B | 336 | [llama-vid-13b-full-336](https://huggingface.co/YanweiLi/llama-vid-13b-full-336) | 65.0 | 66.6 | 1542.3 | 86.0 | 62.3 | 70.0 | 54.3 | 80.0 |
+
+
+
 If you want to evaluate the model on image-based benchmarks, please use the scripts in `scripts/image_only/eval`. 
 For example, run the following command for GQA evaluation:
 ```bash
@@ -196,6 +204,11 @@ bash scripts/image_only/eval/gqa.sh
 Please find more evaluation scripts in `scripts/image_only/eval`.
 
 ### Video
+| LLM | Res. | Model | MSVD-QA | MSRVTT-QA | ActivityNet-QA | Correctness | Detail | Context | Temporal | Consistency |
+|----------|----------|-----------|---|---|---|---|---|---|---|---|
+Vicuna-7B | 224 | [llama-vid-7b-full-224-video-fps-1](https://huggingface.co/YanweiLi/llama-vid-7b-full-224-video-fps-1) | 69.7 | 57.7 | 47.4 | 2.96 | 3.00 | 3.53 | 2.46 | 2.51 | 
+Vicuna-13B | 224 | [llama-vid-13b-full-224-video-fps-1](https://huggingface.co/YanweiLi/llama-vid-13b-full-224-video-fps-1) | 70.0 | 58.9 | 47.5 | 3.07 | 3.05 | 3.60 | 2.58 | 2.63 |
+
 If you want to evaluate the model on video-based benchmarks, please use the scripts in `scripts/video/eval`.
 For example, run the following command for MSVD-QA evaluation:
 ```bash
