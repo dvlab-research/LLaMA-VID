@@ -2,7 +2,7 @@
 
 <a href='https://llama-vid.github.io/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
 <a href='https://llama-vid.github.io/'><img src='https://img.shields.io/badge/Project-Demo-violet'></a>
-<a href=''><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a>
+<a href='https://arxiv.org/abs/2311.17043'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a>
 <a href='https://huggingface.co/YanweiLi'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-blue'></a>
 <a href='https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Data-green'></a>
 
@@ -11,7 +11,7 @@
 LLaMA-VID empowers existing frameworks to support hour-long videos and pushes their upper limit with an extra context token. We build this repo based on LLaVA.
 
 ## Release
-- [11/29] 🔥 LLaMA-VID is comming! We release the [paper](), [code](https://github.com/dvlab-research/LLaMA-VID), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), [models](https://huggingface.co/YanweiLi), and [demo](https://llama-vid.github.io/) for LLaMA-VID!
+- [11/29] 🔥 LLaMA-VID is comming! We release the [paper](https://arxiv.org/abs/2311.17043), [code](https://github.com/dvlab-research/LLaMA-VID), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), [models](https://huggingface.co/YanweiLi), and [demo](https://llama-vid.github.io/) for LLaMA-VID!
 
 ## Contents
 - [Demo](#demo)
@@ -55,7 +55,7 @@ pip install flash-attn --no-build-isolation
 ```
 
 ## Model
-LLaMA-VID simplely contains three prats: encoder and decoder are adopted to produce visual embedding and text-guided features, respectively; 
+LLaMA-VID simply contains three parts: encoder and decoder are adopted to produce visual embedding and text-guided features, respectively; 
 context token and content token are transformed with the tailored token generation strategy; 
 instruction tuning is designed to unleash the potential of LLMs for image and video.
 
@@ -91,7 +91,7 @@ Please put the pretrained data, finetuned data, and eval data in  `LLaMA-VID-Pre
 For video-based dataset, please download the 2.5M subset from [WebVid](https://maxbain.com/webvid-dataset/) and ActivityNet dataset from [official website](http://activity-net.org/download.html) or [video-chatgpt](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/docs/train_video_chatgpt.md).
 If you want to perform evaluation, please also download corresponding files from [here](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/quantitative_evaluation/README.md).
 
-For meta info, please down load the following files and organize them as in [Structure](#structure).
+For meta info, please download the following files and organize them as in [Structure](#structure).
 
 | Data file name | Size |
 | --- | ---: |
@@ -252,7 +252,7 @@ If you find this repo useful for your research, please consider citing the paper
 @article{li2023llamavid,
   title={LLaMA-VID: An Image is Worth 2 Tokens in Large Language Models},
   author={Li, Yanwei and Wang, Chengyao and Jia, Jiaya},
-  journal={arXiv preprint },
+  journal={arXiv preprint arXiv:2311.17043},
   year={2023}
 }
 ```
