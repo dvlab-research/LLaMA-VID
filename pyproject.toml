@@ -13,7 +13,7 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
 ]
 dependencies = [
-    "llava==1.1.1",
+    "llava@git+https://github.com/haotian-liu/LLaVA.git@1619889c712e347be1cb4f78ec66e7cf414ac1a6",
     "einops", "fastapi", "gradio==3.35.2", "markdown2[all]", "numpy",
     "requests", "sentencepiece", "tokenizers>=0.12.1",
     "torch==2.0.1", "torchvision==0.15.2", "uvicorn", "wandb",
