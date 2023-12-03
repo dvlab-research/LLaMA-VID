@@ -4,9 +4,9 @@ deepspeed llamavid/train/train_mem.py \
     --deepspeed ./scripts/zero2_offload.json \
     --model_name_or_path model_zoo/LLM/vicuna/7B-V1.5 \
     --version imgsp_v1 \
-    --data_path ./data/LLaVA-Finetune/llava_video/llava_v1_5_mix665k_with_video_chatgpt.json \
-    --image_folder ./data/LLaVA-Finetune \
-    --video_folder ./data/LLaVA-Finetune \
+    --data_path ./data/LLaMA-VID-Finetune/llava_video/llava_v1_5_mix665k_with_video_chatgpt.json \
+    --image_folder ./data/LLaMA-VID-Finetune \
+    --video_folder ./data/LLaMA-VID-Finetune \
     --vision_tower ./model_zoo/LAVIS/eva_vit_g.pth \
     --image_processor ./llamavid/processor/clip-patch14-224 \
     --pretrain_mm_mlp_adapter ./work_dirs/llamavid-7b-pretrain-224-video-fps-1/mm_projector.bin \
