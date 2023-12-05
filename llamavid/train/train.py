@@ -24,6 +24,8 @@ import json
 import logging
 import pathlib
 from typing import Dict, Optional, Sequence, List
+import pickle
+import math
 
 import torch
 
@@ -78,6 +80,7 @@ class DataArguments:
     image_folder: Optional[str] = field(default=None)
     video_folder: Optional[str] = field(default=None)
     video_fps: Optional[int] = field(default=1)
+    video_token: Optional[int] = field(default=2)
     image_aspect_ratio: str = 'square'
     image_grid_pinpoints: Optional[str] = field(default=None)
     input_prompt: Optional[str] = field(default=None)
@@ -336,6 +339,27 @@ def preprocess_multimodal(
             sentence["value"] = sentence["value"].replace(DEFAULT_IMAGE_TOKEN, replace_token)
 
     return sources
+
+
+def preprocess_multimodal_movie(
+    sources: Sequence[str],
+    data_args: DataArguments,
+    video_inputs: str
+) -> Dict:
+    is_multimodal = data_args.is_multimodal
+    if not is_multimodal:
+        return sources
+
+    for source in sources:
+        for sentence in source:
+            if DEFAULT_IMAGE_TOKEN in sentence['value']:
+                prompt = sentence['value'].replace(DEFAULT_IMAGE_TOKEN, '').strip()
+            replace_token = video_inputs
+            if data_args.mm_use_im_start_end:
+                replace_token = DEFAULT_IM_START_TOKEN + replace_token + DEFAULT_IM_END_TOKEN
+            sentence["value"] = sentence["value"].replace(DEFAULT_IMAGE_TOKEN, replace_token)
+
+    return sources, prompt
 
 
 def preprocess_llama_2(
@@ -815,7 +839,8 @@ class LazySupervisedDataset(Dataset):
         attempt, max_attempt = 0, 10
         while attempt < max_attempt:
             try:
-                sources = self.list_data_dict[i]  
+                sources = self.list_data_dict[i]
+                suffix = None
                 if isinstance(i, int):
                     sources = [sources]
                 assert len(sources) == 1, "Don't know why it is wrapped to a list"  # FIXME
@@ -860,17 +885,30 @@ class LazySupervisedDataset(Dataset):
                     video_file = self.list_data_dict[i]['video']
                     video_folder = self.data_args.video_folder
                     video_file = os.path.join(video_folder, video_file)
+                    suffix = video_file.split('.')[-1]
                     if not os.path.exists(video_file):
                         print('File {} not exist!'.format(video_file))
-                    vr = VideoReader(video_file, ctx=cpu(0))
-                    sample_fps = round(vr.get_avg_fps()/self.data_args.video_fps)
-                    frame_idx = [i for i in range(0, len(vr), sample_fps)]
-                    video = vr.get_batch(frame_idx).asnumpy()
-                    processor = self.data_args.image_processor
-                    image = processor.preprocess(video, return_tensors='pt')['pixel_values']
-                    sources = preprocess_multimodal(
-                        copy.deepcopy([e["conversations"] for e in sources]),
-                        self.data_args)                    
+                    
+                    if suffix == 'pkl':
+                        video_info = pickle.load(open(video_file, 'rb'))
+                        image = torch.from_numpy(video_info['feats'][:, 1:])
+                        input_prompt = video_info['inputs'].replace('...', '')
+                        # replace the default image token with multiple tokens
+                        input_prompt = input_prompt.replace(DEFAULT_IMAGE_TOKEN, 
+                                                            DEFAULT_IMAGE_TOKEN * self.data_args.video_token)
+                        sources, query_prompt = preprocess_multimodal_movie(
+                            copy.deepcopy([e["conversations"] for e in sources]),
+                            self.data_args, input_prompt)
+                    else:
+                        vr = VideoReader(video_file, ctx=cpu(0))
+                        sample_fps = round(vr.get_avg_fps()/self.data_args.video_fps)
+                        frame_idx = [i for i in range(0, len(vr), sample_fps)]
+                        video = vr.get_batch(frame_idx).asnumpy()
+                        processor = self.data_args.image_processor
+                        image = processor.preprocess(video, return_tensors='pt')['pixel_values']
+                        sources = preprocess_multimodal(
+                            copy.deepcopy([e["conversations"] for e in sources]),
+                            self.data_args)
                 else:
                     sources = copy.deepcopy([e["conversations"] for e in sources])
                 
@@ -894,6 +932,9 @@ class LazySupervisedDataset(Dataset):
         else:
             prompt = None
         
+        if suffix == 'pkl':
+            prompt = [query_prompt]
+
         if isinstance(i, int):
             data_dict = dict(input_ids=data_dict["input_ids"][0],
                              labels=data_dict["labels"][0])
@@ -941,7 +982,7 @@ class DataCollatorForSupervisedDataset(object):
 
         if 'image' in instances[0]:
             images = [instance['image'] for instance in instances]
-            if all(x is not None and x.shape == images[0].shape for x in images):
+            if all(x is not None and x.shape == images[0].shape for x in images) and len(images) > 1:
                 batch['images'] = torch.stack(images)
             else:
                 batch['images'] = images
@@ -972,8 +1013,9 @@ def train():
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
     local_rank = training_args.local_rank
     compute_dtype = (torch.float16 if training_args.fp16 else (torch.bfloat16 if training_args.bf16 else torch.float32))
-
-    bnb_model_from_pretrained_args = {}
+    bnb_model_from_pretrained_args = dict(
+        torch_dtype=(torch.float32 if training_args.fp16 else (torch.bfloat16 if training_args.bf16 else torch.float32)),
+    )
     if training_args.bits in [4, 8]:
         from transformers import BitsAndBytesConfig
         bnb_model_from_pretrained_args.update(dict(
@@ -991,15 +1033,30 @@ def train():
             )
         ))
 
+    config = transformers.AutoConfig.from_pretrained(model_args.model_name_or_path, trust_remote_code=True)
+    orig_rope_scaling = getattr(config, "rope_scaling", None)
+    if orig_rope_scaling is None:
+        orig_rope_scaling = {"factor": 1}
+
+    orig_rope_scaling_factor = orig_rope_scaling["factor"] if "factor" in orig_rope_scaling.keys() else 1
+    orig_ctx_len = getattr(config, "max_position_embeddings", None)
+    if orig_ctx_len:
+        orig_ctx_len *= orig_rope_scaling_factor
+        if training_args.model_max_length > orig_ctx_len:
+            scaling_factor = float(math.ceil(training_args.model_max_length / orig_ctx_len))
+            config.rope_scaling = {"type": "linear", "factor": scaling_factor}
+
     if model_args.vision_tower is not None:
         model = LlavaLlamaAttForCausalLM.from_pretrained(
             model_args.model_name_or_path,
+            config=config,
             cache_dir=training_args.cache_dir,
             **bnb_model_from_pretrained_args
         )
     else:
         model = transformers.LlamaForCausalLM.from_pretrained(
             model_args.model_name_or_path,
+            config=config,
             cache_dir=training_args.cache_dir,
             **bnb_model_from_pretrained_args
         )

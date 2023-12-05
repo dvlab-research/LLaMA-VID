@@ -7,7 +7,8 @@ IFS=',' read -ra GPULIST <<< "$gpu_list"
 CHUNKS=${#GPULIST[@]}
 
 CKPT="llama-vid/llama-vid-7b-full-224-video-fps-1"
-
+OPENAIKEY=""
+OPENAIBASE=""
 
 for IDX in $(seq 0 $((CHUNKS-1))); do
     CUDA_VISIBLE_DEVICES=${GPULIST[$IDX]} python llamavid/eval/model_msvd_qa.py \
@@ -29,4 +30,6 @@ python llamavid/eval/eval_msvd_qa.py \
     --output_dir ./work_dirs/eval_msvd/$CKPT/results \
     --output_json ./work_dirs/eval_msvd/$CKPT/results.json \
     --num_chunks $CHUNKS \
-    --num_tasks 16
+    --num_tasks 16 \
+    --api_key $OPENAIKEY \
+    --api_base $OPENAIBASE

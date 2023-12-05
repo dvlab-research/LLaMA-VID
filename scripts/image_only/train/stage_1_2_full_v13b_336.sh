@@ -16,7 +16,7 @@ deepspeed llamavid/train/train_mem.py \
     --num_query 32 \
     --pretrain_qformer model_zoo/LAVIS/instruct_blip_vicuna7b_trimmed.pth \
     --bf16 True \
-    --output_dir ./work_dirs/llamavid-13b-pretrain-336 \
+    --output_dir ./work_dirs/llama-vid-13b-pretrain-336 \
     --num_train_epochs 1 \
     --per_device_train_batch_size 32 \
     --per_device_eval_batch_size 4 \
@@ -46,7 +46,7 @@ deepspeed llamavid/train/train_mem.py \
     --image_folder ./data/LLaMA-VID-Finetune \
     --vision_tower ./model_zoo/LAVIS/eva_vit_g.pth \
     --image_processor ./llamavid/processor/clip-patch14-336 \
-    --pretrain_mm_mlp_adapter ./work_dirs/llamavid-13b-pretrain-336/mm_projector.bin \
+    --pretrain_mm_mlp_adapter ./work_dirs/llama-vid-13b-pretrain-336/mm_projector.bin \
     --mm_projector_type mlp2x_gelu \
     --mm_vision_select_layer -2 \
     --mm_use_im_start_end False \

@@ -50,7 +50,7 @@ deepspeed llamavid/train/train_mem.py \
     --video_folder ./data/LLaMA-VID-Finetune \
     --vision_tower ./model_zoo/LAVIS/eva_vit_g.pth \
     --image_processor ./llamavid/processor/clip-patch14-224 \
-    --pretrain_mm_mlp_adapter ./work_dirs/llamavid-7b-pretrain-224-video-fps-1/mm_projector.bin \
+    --pretrain_mm_mlp_adapter ./work_dirs/llama-vid-7b-pretrain-224-video-fps-1/mm_projector.bin \
     --mm_projector_type mlp2x_gelu \
     --mm_vision_select_layer -2 \
     --mm_use_im_start_end False \

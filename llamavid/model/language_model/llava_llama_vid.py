@@ -71,7 +71,15 @@ class LlavaLlamaAttForCausalLM(LlamaForCausalLM, LLaMAVIDMetaForCausalLM):
         )
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
+        if not self.training:
+            if images[0].device != self.device:
+                images[0] = images[0].to(device=self.device)
+            if input_ids.device != self.device:
+                input_ids = input_ids.to(device=self.device)
+
         input_ids, attention_mask, past_key_values, inputs_embeds, labels = self.prepare_inputs_labels_for_multimodal(input_ids, attention_mask, past_key_values, labels, images, prompts=prompts)
+
+        torch.cuda.empty_cache()
 
         # decoder outputs consists of (dec_features, layer_state, dec_hidden, dec_attn)
         outputs = self.model(

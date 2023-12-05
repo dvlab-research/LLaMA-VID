@@ -14,7 +14,7 @@ def write_json(json_data, output_file):
   
 if __name__ == '__main__':
     video_file = 'data/video-chatgpt/video_chatgpt_training_all.json'
-    llava_file = 'data/LLaMA-VID-Finetune/llava_v1_5_mix665k_maxr_4_total_1_2m.json' 
+    llava_file = 'data/LLaMA-VID-Finetune/llava_v1_5_mix665k.json' 
     output_file = 'data/llava_video_instruct.json'
     llava_data = json.load(open(llava_file, 'r'))
     video_data = json.load(open(video_file, 'r'))

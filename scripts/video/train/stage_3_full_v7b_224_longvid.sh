@@ -2,9 +2,9 @@
 
 deepspeed llamavid/train/train_mem.py \
     --deepspeed ./scripts/zero2_offload.json \
-    --model_name_or_path model_zoo/LLM/vicuna/7B-V1.5 \
+    --model_name_or_path ./work_dirs/llama-vid-7b-full-224-video-fps-1 \
     --version imgsp_v1 \
-    --data_path ./data/LLaMA-VID-Finetune/llava_v1_5_mix665k_with_video_chatgpt.json \
+    --data_path ./data/LLaMA-VID-Finetune/long_videoqa.json \
     --image_folder ./data/LLaMA-VID-Finetune \
     --video_folder ./data/LLaMA-VID-Finetune \
     --vision_tower ./model_zoo/LAVIS/eva_vit_g.pth \
@@ -17,18 +17,19 @@ deepspeed llamavid/train/train_mem.py \
     --image_aspect_ratio pad \
     --group_by_modality_length True \
     --video_fps 1 \
-    --bert_type "qformer_pretrain" \
+    --video_token 2 \
+    --bert_type "qformer_pretrain_freeze_all" \
     --num_query 32 \
     --compress_type "mean" \
     --bf16 True \
-    --output_dir ./work_dirs/llama-vid-7b-full-224-video-fps-1  \
+    --output_dir ./work_dirs/llama-vid-7b-full-224-long-video \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 4 \
-    --per_device_eval_batch_size 4 \
-    --gradient_accumulation_steps 4 \
+    --per_device_train_batch_size 1 \
+    --per_device_eval_batch_size 1 \
+    --gradient_accumulation_steps 1 \
     --evaluation_strategy "no" \
     --save_strategy "steps" \
-    --save_steps 1000 \
+    --save_steps 200 \
     --save_total_limit 1 \
     --learning_rate 2e-5 \
     --weight_decay 0. \
@@ -36,8 +37,8 @@ deepspeed llamavid/train/train_mem.py \
     --lr_scheduler_type "cosine" \
     --logging_steps 1 \
     --tf32 True \
-    --model_max_length 2048 \
+    --model_max_length 65536 \
     --gradient_checkpointing True \
-    --dataloader_num_workers 4 \
+    --dataloader_num_workers 1 \
     --lazy_preprocess True \
     --report_to wandb

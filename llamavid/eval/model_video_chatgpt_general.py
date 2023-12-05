@@ -64,7 +64,6 @@ def run_inference(args):
     # Initialize the model
     model_name = get_model_name_from_path(args.model_path)
     tokenizer, model, image_processor, context_len = load_pretrained_model(args.model_path, args.model_base, model_name, args.model_max_length)
-    model.get_model().initialize_attention_modules(args, for_eval=True)
 
     # Load both ground truth file containing questions and answers
     with open(args.gt_file) as file:

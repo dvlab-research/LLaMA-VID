@@ -11,6 +11,7 @@
 LLaMA-VID empowers existing frameworks to support hour-long videos and pushes their upper limit with an extra context token. We build this repo based on LLaVA.
 
 ## Release
+- [12/05] 🔥 We release the full training and evalution [model](https://huggingface.co/YanweiLi/llama-vid-7b-full-224-long-video), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), and scripts to support movie chating! 
 - [11/29] 🔥 LLaMA-VID is comming! We release the [paper](https://arxiv.org/abs/2311.17043), [code](https://github.com/dvlab-research/LLaMA-VID), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), [models](https://huggingface.co/YanweiLi), and [demo](https://llama-vid.github.io/) for LLaMA-VID!
 
 ## Contents
@@ -44,7 +45,7 @@ git clone https://github.com/dvlab-research/LLaMA-VID.git
 ```bash
 conda create -n llamavid python=3.10 -y
 conda activate llamavid
-cd 
+cd LLaMA-VID
 pip install --upgrade pip  # enable PEP 660 support
 pip install -e .
 ```
@@ -73,7 +74,7 @@ Image only | 336 | 4K | Vicuna-7B-v1.5 | EVA-G | LLaVA1.5-Instruct | full_ft-1e 
 Image only | 336 | 4K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-Instruct | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-13b-full-336) |
 Short video | 224 | 4K | Vicuna-7B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-7b-full-224-video-fps-1) |
 Short video | 224 | 4K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-13b-full-224-video-fps-1) |
-Long video | 224 | 64K | Vicuna-13B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct + LongVideoQA | full_ft-1e | comming |
+Long video | 224 | 64K | Vicuna-7B-v1.5 | EVA-G | LLaVA1.5-VideoChatGPT-Instruct + LongVideoQA | full_ft-1e | [ckpt](https://huggingface.co/YanweiLi/llama-vid-7b-full-224-long-video) |
 
 Here are the pretrained weights (text decoder + context attention + projector) on Stage 1 data only:
 | Type | Image Size | Max Token | Base LLM | Vision Encoder | Pretrain Data | Pretraining schedule | Download |
@@ -92,6 +93,8 @@ Please put the pretrained data, finetuned data, and eval data in  `LLaMA-VID-Pre
 For video-based dataset, please download the 2.5M subset from [WebVid](https://maxbain.com/webvid-dataset/) and ActivityNet dataset from [official website](http://activity-net.org/download.html) or [video-chatgpt](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/docs/train_video_chatgpt.md).
 If you want to perform evaluation, please also download corresponding files from [here](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/quantitative_evaluation/README.md).
 
+As for long video tuning, please download the long video data from [MovieNet](https://movienet.github.io/) and our construced long video QA pairs from [here](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data).
+
 For meta info, please download the following files and organize them as in [Structure](#structure).
 
 | Data file name | Size |
@@ -101,6 +104,7 @@ For meta info, please download the following files and organize them as in [Stru
 | [llava_558k_with_webvid.json](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data) | 254 MB |
 | [llava_v1_5_mix665k_with_video_chatgpt.json](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data) | 860 MB |
 | [llava_v1_5_mix665k_with_video_chatgpt_maxtime_5min.json](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data) | 860 MB |
+| [long_videoqa.json](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data) | 260MB |
 
 ### Pretrained Weights
 We recommend users to download the pretrained weights from the following link [Vicuna-7b-v1.5](https://huggingface.co/lmsys/vicuna-7b-v1.5), [Vicuna-13b-v1.5](https://huggingface.co/lmsys/vicuna-13b-v1.5), [EVA-ViT-G](https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/BLIP2/eva_vit_g.pth), [QFormer-7b](https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/InstructBLIP/instruct_blip_vicuna7b_trimmed.pth), [QFormer-13b](https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/InstructBLIP/instruct_blip_vicuna13b_trimmed.pth) and put them in `model_zoo` following [Structure](#structure).
@@ -135,8 +139,12 @@ LLaMA-VID
 │   │   ├── videos
 │   ├── LLaMA-VID-Finetune
 │   │   ├── llava_v1_5_mix665k.json
+│   │   ├── llava_v1_5_mix665k_maxround_6_total_921k.json
+│   │   ├── llava_v1_5_mix665k_maxround_12_total_714k.json
 │   │   ├── llava_v1_5_mix665k_with_video_chatgpt.json
 │   │   ├── llava_v1_5_mix665k_with_video_chatgpt_maxtime_5min.json
+│   │   ├── long_videoqa.json
+│   │   ├── movienet
 │   │   ├── activitynet
 │   │   ├── coco
 │   │   ├── gqa
@@ -184,6 +192,20 @@ bash scripts/video/train/stage_1_2_full_v13b_224_fps_1.sh
 ```
 Please find more training scripts in `scripts/video/train`.
 
+### Long Video
+We provide dataset and scripts for long video-based training. Please download the long video-based data following [Preparation](#preparation) and organize them as in [Structure](#structure).
+In the training stage, we first extract all the frames from the long video and save the visual features local for efficient training. 
+```bash
+python scripts/extra_tool/extract_movienet_features.py \
+    --video_dir <path to movienet video> \
+    --files_dir <path to movienet files> \ # files in downladed MovieNet.tar.gz
+    --feat_dir <path to output features>
+```
+
+And run the following command for Vicuna-7B with image size 224:
+```bash
+bash scripts/video/train/stage_3_full_v7b_224_longvid.sh
+```
 
 ## Evaluation
 We perform evaluation on both image-based and video-based benchmarks. Please download the evaluation data following [Preparation](#preparation) and organize them as in [Structure](#structure).
@@ -231,7 +253,8 @@ or try this for video inference:
 ```bash
 python -m llamavid.serve.cli \
     --model-path work_dirs/llama-vid/llama-vid-7b-full-224-video-fps-1 \
-    --image-file <path to your video>
+    --image-file <path to your video> \
+    --temperature 0.5
 ```
 
 You can also try 4bit or 8bit for efficient inference 
@@ -239,6 +262,24 @@ You can also try 4bit or 8bit for efficient inference
 python -m llamavid.serve.cli \
     --model-path work_dirs/llama-vid/llama-vid-7b-full-224-video-fps-1 \
     --image-file <path to your video>
+    --temperature 0.5 \
+    --load-4bit
+```
+
+### Long Video Inference
+For long video, please first process the video data and subtitles like this:
+```bash
+python scripts/extra_tool/extract_movienet_features.py \
+    --video_dir <path to movienet video> \
+    --files_dir <path to movienet files> \ # files in downladed MovieNet.tar.gz
+    --feat_dir <path to output features>
+```
+    
+Then, please try this for long video inference:
+```bash
+python llamavid/serve/run_llamavid_movie.py \
+    --model-path work_dirs/llama-vid/llama-vid-7b-full-224-long-video \
+    --video-file <path to your processed video file> \
     --load-4bit
 ```
 
@@ -250,9 +291,9 @@ We provide some examples in this section. More examples can be found in our [pro
 </div>
 
 ## TODO
-- [ ] Release all finetuned weights.
-- [ ] Support hour-long video fintuning.
-- [ ] Support gradio demo.
+- [x] Release all finetuned weights.
+- [x] Support hour-long video fintuning.
+- [x] Support gradio demo.
 
 ## Citation
 If you find this repo useful for your research, please consider citing the paper

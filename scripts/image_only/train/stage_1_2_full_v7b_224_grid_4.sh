@@ -43,7 +43,7 @@ deepspeed llamavid/train/train_mem.py \
     --deepspeed ./scripts/zero2.json \
     --model_name_or_path model_zoo/LLM/vicuna/7B-V1.5 \
     --version imgsp_v1 \
-    --data_path ./data/LLaMA-VID-Finetune/llava_v1_5_mix665k_maxr_12_total_714k.json \
+    --data_path ./data/LLaMA-VID-Finetune/llava_v1_5_mix665k_maxround_12_total_714k.json \
     --image_folder ./data/LLaMA-VID-Finetune \
     --vision_tower ./model_zoo/LAVIS/eva_vit_g.pth \
     --image_processor ./llamavid/processor/clip-patch14-224 \
