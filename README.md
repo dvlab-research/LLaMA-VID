@@ -312,7 +312,7 @@ We would like to thank the following repos for their great work:
 - This work is built upon the [LLaVA](https://github.com/haotian-liu/LLaVA).
 - This work utilizes LLMs from [Vicuna](https://github.com/lm-sys/FastChat).
 - This work utilizes pretrained weights from [InstructBLIP](https://github.com/salesforce/LAVIS).
-- We perform video-based evalution from [Video-ChatGPT](https://github.com/mbzuai-oryx/Video-ChatGPT).
+- We perform video-based evaluation from [Video-ChatGPT](https://github.com/mbzuai-oryx/Video-ChatGPT).
 
 ## License
 [![Code License](https://img.shields.io/badge/Code%20License-Apache_2.0-yellow.svg)](https://github.com/dvlab-research/LLaMA-VID/blob/main/LICENSE)
