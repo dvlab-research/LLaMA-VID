@@ -93,7 +93,7 @@ Please put the pretrained data, finetuned data, and eval data in  `LLaMA-VID-Pre
 For video-based dataset, please download the 2.5M subset from [WebVid](https://maxbain.com/webvid-dataset/) and ActivityNet dataset from [official website](http://activity-net.org/download.html) or [video-chatgpt](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/docs/train_video_chatgpt.md).
 If you want to perform evaluation, please also download corresponding files from [here](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/quantitative_evaluation/README.md).
 
-As for long video tuning, please download the long video data from [MovieNet](https://movienet.github.io/) and our construced long video QA pairs from [here](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data).
+As for long video tuning, please download the long video data from [MovieNet](https://movienet.github.io/), shot detection results from [here](https://mycuhk-my.sharepoint.com/personal/1155186668_link_cuhk_edu_hk/_layouts/15/onedrive.aspx?id=%2Fpersonal%2F1155186668%5Flink%5Fcuhk%5Fedu%5Fhk%2FDocuments%2FLLaMA%2DVID%2Fshot%2Ezip&parent=%2Fpersonal%2F1155186668%5Flink%5Fcuhk%5Fedu%5Fhk%2FDocuments%2FLLaMA%2DVID&ga=1) and our construced long video QA pairs from [here](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data). Place shot detection results under `LLaMA-VID-Finetune/movienet/files` before preprocessing.
 
 For meta info, please download the following files and organize them as in [Structure](#structure).
 
