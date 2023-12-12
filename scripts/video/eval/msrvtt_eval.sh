@@ -27,8 +27,8 @@ wait
 
 python llamavid/eval/eval_msvd_qa.py \
     --pred_path ./work_dirs/eval_msrvtt/$CKPT \
-    --output_dir ./work_dirs/eval_msvd/$CKPT/results \
-    --output_json ./work_dirs/eval_msvd/$CKPT/results.json \
+    --output_dir ./work_dirs/eval_msrvtt/$CKPT/results \
+    --output_json ./work_dirs/eval_msrvtt/$CKPT/results.json \
     --num_chunks $CHUNKS \
     --num_tasks 16 \
     --api_key $OPENAIKEY \
