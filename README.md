@@ -91,7 +91,7 @@ We provide the processed image-based data for LLaMA-VID training. We organize th
 Please put the pretrained data, finetuned data, and eval data in  `LLaMA-VID-Pretrain`, `LLaMA-VID-Finetune`, and `LLaMA-VID-Eval` subset following [Structure](#structure).
 
 For video-based dataset, please download the 2.5M subset from [WebVid](https://maxbain.com/webvid-dataset/) and ActivityNet dataset from [official website](http://activity-net.org/download.html) or [video-chatgpt](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/docs/train_video_chatgpt.md).
-If you want to perform evaluation, please also download corresponding files from [here](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/quantitative_evaluation/README.md).
+If you want to perform evaluation, please also download corresponding files from [here](https://github.com/mbzuai-oryx/Video-ChatGPT/blob/main/quantitative_evaluation/README.md). You can download MSVD-QA from [here](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155186668_link_cuhk_edu_hk/EUNEXqg8pctPq3WZPHb4Fd8BYIxHO5qPCnU6aWsrV1O4JQ?e=IR15Ua) and MSRVTT-QA from [here](https://mycuhk-my.sharepoint.com/:u:/g/personal/1155186668_link_cuhk_edu_hk/EcEXh1HfTXhLrRnuwHbl15IBJeRop-d50Q90njHmhvLwtA?e=x5L78z).
 
 As for long video tuning, please download the long video data from [MovieNet](https://movienet.github.io/), shot detection results from [here](https://mycuhk-my.sharepoint.com/personal/1155186668_link_cuhk_edu_hk/_layouts/15/onedrive.aspx?id=%2Fpersonal%2F1155186668%5Flink%5Fcuhk%5Fedu%5Fhk%2FDocuments%2FLLaMA%2DVID%2Fshot%2Ezip&parent=%2Fpersonal%2F1155186668%5Flink%5Fcuhk%5Fedu%5Fhk%2FDocuments%2FLLaMA%2DVID&ga=1) and our construced long video QA pairs from [here](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data). Place shot detection results under `LLaMA-VID-Finetune/movienet/files` before preprocessing.
 
@@ -281,53 +281,6 @@ python llamavid/serve/run_llamavid_movie.py \
     --model-path work_dirs/llama-vid/llama-vid-7b-full-224-long-video \
     --video-file <path to your processed video file> \
     --load-4bit
-```
-
-### Gradio Web UI
-
-Here, we adopt the Gradio UI similar to that in LLaVA to provide a user-friendly interface for LLaMA-VID.
-To launch a Gradio demo locally, please run the following commands one by one. If you plan to launch multiple model workers to compare between different checkpoints, you only need to launch the controller and the web server *ONCE*.
-
-#### Launch a controller
-```Shell
-python -m llamavid.serve.controller --host 0.0.0.0 --port 10000
-```
-
-#### Launch a gradio web server.
-```Shell
-python -m llamavid.serve.gradio_web_server --controller http://localhost:10000 --model-list-mode reload
-```
-You just launched the Gradio web interface. Now, you can open the web interface with the URL printed on the screen. You may notice that there is no model in the model list. Do not worry, as we have not launched any model worker yet. It will be automatically updated when you launch a model worker.
-
-#### Launch a model worker
-This is the actual *worker* that performs the inference on the GPU.  Each worker is responsible for a single model specified in `--model-path`.
-
-```Shell
-python -m llamavid.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path work_dirs/llama-vid/llama-vid-7b-full-224-long-video
-```
-Wait until the process finishes loading the model and you see "Uvicorn running on ...".  Now, refresh your Gradio web UI, and you will see the model you just launched in the model list.
-
-You can launch as many workers as you want, and compare between different models in the same Gradio interface. For example, short video model here. Please keep the `--controller` the same, and modify the `--port` and `--worker` to a different port number for each worker.
-```Shell
-python -m llamavid.serve.model_worker_short --host 0.0.0.0 --controller http://localhost:10000 --port <different from 40000, say 40001> --worker http://localhost:<change accordingly, i.e. 40001> --model-path work_dirs/llama-vid/llama-vid-7b-full-224-video-fps-1
-```
-
-If you are using an Apple device with an M1 or M2 chip, you can specify the mps device by using the `--device` flag: `--device mps`.
-
-#### Launch a model worker (Multiple GPUs, when GPU VRAM <= 24GB)
-
-If the VRAM of your GPU is less than 24GB (e.g., RTX 3090, RTX 4090, etc.), you may try running it with multiple GPUs. Our latest code base will automatically try to use multiple GPUs if you have more than one GPU. You can specify which GPUs to use with `CUDA_VISIBLE_DEVICES`. Below is an example of running with the first two GPUs.
-
-```Shell
-CUDA_VISIBLE_DEVICES=0,1 python -m llamavid.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path work_dirs/llama-vid/llama-vid-7b-full-224-long-video
-```
-
-#### Launch a model worker (4-bit, 8-bit inference, quantized)
-
-You can launch the model worker with quantized bits (4-bit, 8-bit), which allows you to run the inference with reduced GPU memory footprint. Note that inference with quantized bits may not be as accurate as the full-precision model. Simply append `--load-4bit` or `--load-8bit` to the **model worker** command that you are executing. Below is an example of running with 4-bit quantization.
-
-```Shell
-python -m llamavid.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path work_dirs/llama-vid/llama-vid-7b-full-224-long-video --load-4bit
 ```
 
 ## Examples
