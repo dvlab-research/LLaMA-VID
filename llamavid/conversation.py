@@ -106,6 +106,16 @@ class Conversation:
     def append_message(self, role, message):
         self.messages.append([role, message])
 
+    def get_videos(self):
+        videos = []
+        for i, (role, msg) in enumerate(self.messages[self.offset:]):
+            if i % 2 == 0:
+                if type(msg) is tuple:
+                    msg, _, video, image_process_mode = msg
+                    if video is None: continue
+                    videos.append(video)
+        return videos
+
     def get_images(self, return_pil=False):
         images = []
         for i, (role, msg) in enumerate(self.messages[self.offset:]):
@@ -114,7 +124,8 @@ class Conversation:
                     import base64
                     from io import BytesIO
                     from PIL import Image
-                    msg, image, image_process_mode = msg
+                    msg, image, _, image_process_mode = msg
+                    if image is None: continue
                     if image_process_mode == "Pad":
                         def expand2square(pil_img, background_color=(122, 116, 104)):
                             width, height = pil_img.size
@@ -163,23 +174,27 @@ class Conversation:
                 if type(msg) is tuple:
                     import base64
                     from io import BytesIO
-                    msg, image, image_process_mode = msg
-                    max_hw, min_hw = max(image.size), min(image.size)
-                    aspect_ratio = max_hw / min_hw
-                    max_len, min_len = 800, 400
-                    shortest_edge = int(min(max_len / aspect_ratio, min_len, min_hw))
-                    longest_edge = int(shortest_edge * aspect_ratio)
-                    W, H = image.size
-                    if H > W:
-                        H, W = longest_edge, shortest_edge
-                    else:
-                        H, W = shortest_edge, longest_edge
-                    image = image.resize((W, H))
-                    buffered = BytesIO()
-                    image.save(buffered, format="JPEG")
-                    img_b64_str = base64.b64encode(buffered.getvalue()).decode()
-                    img_str = f'<img src="data:image/png;base64,{img_b64_str}" alt="user upload image" />'
-                    msg = img_str + msg.replace('<image>', '').strip()
+                    msg, image, video, image_process_mode = msg
+                    if image is not None:
+                        max_hw, min_hw = max(image.size), min(image.size)
+                        aspect_ratio = max_hw / min_hw
+                        max_len, min_len = 800, 400
+                        shortest_edge = int(min(max_len / aspect_ratio, min_len, min_hw))
+                        longest_edge = int(shortest_edge * aspect_ratio)
+                        W, H = image.size
+                        if H > W:
+                            H, W = longest_edge, shortest_edge
+                        else:
+                            H, W = shortest_edge, longest_edge
+                        image = image.resize((W, H))
+                        buffered = BytesIO()
+                        image.save(buffered, format="JPEG")
+                        img_b64_str = base64.b64encode(buffered.getvalue()).decode()
+                        img_str = f'<img src="data:image/png;base64,{img_b64_str}" alt="user upload image" />'
+                        msg = img_str + msg.replace('<image>', '').strip()
+                    elif video is not None:
+                        video_str = f'<video controls playsinline width="500" style="display: inline-block;"  src="./file={video}"></video><br>'
+                        msg = video_str + msg.replace('<image>', '').strip()
                     ret.append([msg, None])
                 else:
                     ret.append([msg, None])
