@@ -266,11 +266,18 @@ python -m llamavid.serve.cli \
 ```
 
 ### Long Video Inference
-For long video, please first process the video data and subtitles like this:
+For long video, if you want to inference on videos in movienet, please first process the video data and subtitles like this:
 ```bash
 python scripts/extra_tool/extract_movienet_features.py \
     --video_dir <path to movienet video> \
     --files_dir <path to movienet files> \ # files in downladed MovieNet.tar.gz
+    --feat_dir <path to output features>
+```
+
+If you want to inference with your customized video, please first process the video data and subtitles like this:
+```bash
+python scripts/extra_tool/extract_video_features_subtitles.py \
+    --video_file <path to customized video> \
     --feat_dir <path to output features>
 ```
     
