@@ -108,7 +108,8 @@ def main(args):
                 images=image_tensor,
                 do_sample=True,
                 temperature=args.temperature,
-                max_new_tokens=1024,
+                top_p=args.top_p,
+                max_new_tokens=args.max_new_tokens,
                 streamer=streamer,
                 use_cache=True,
                 stopping_criteria=[stopping_criteria])
@@ -129,6 +130,7 @@ if __name__ == "__main__":
     parser.add_argument("--num-gpus", type=int, default=1)
     parser.add_argument("--conv-mode", type=str, default=None)
     parser.add_argument("--temperature", type=float, default=0.2) # set to 0.5 for video
+    parser.add_argument("--top-p", type=float, default=0.7)
     parser.add_argument("--max-new-tokens", type=int, default=512)
     parser.add_argument("--load-8bit", action="store_true")
     parser.add_argument("--load-4bit", action="store_true")
