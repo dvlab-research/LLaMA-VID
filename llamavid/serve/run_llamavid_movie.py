@@ -23,7 +23,7 @@ def parse_args():
     parser.add_argument("--video-file", type=str, required=True)
     parser.add_argument("--video-token", type=int, default=2)
     parser.add_argument("--question", type=str, required=True)
-    parser.add_argument("--conv-mode", type=str, default=None)
+    parser.add_argument("--conv-mode", type=str, default='vicuna_v1')
     parser.add_argument("--model-max-length", type=int, default=None)
     parser.add_argument("--pure-text", action='store_true', help='use image or not')
     parser.add_argument("--load-8bit", action="store_true")
