@@ -11,8 +11,9 @@
 LLaMA-VID empowers existing frameworks to support hour-long videos and pushes their upper limit with an extra context token. We build this repo based on LLaVA.
 
 ## Release
-- [12/05] 🔥 We release the full training and evalution [model](https://huggingface.co/YanweiLi/llama-vid-7b-full-224-long-video), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), and scripts to support movie chating! 
-- [11/29] 🔥 LLaMA-VID is comming! We release the [paper](https://arxiv.org/abs/2311.17043), [code](https://github.com/dvlab-research/LLaMA-VID), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), [models](https://huggingface.co/YanweiLi), and [demo](https://llama-vid.github.io/) for LLaMA-VID!
+- [24/07/04] 🔥 Our work has been accepted to ECCV 2024!
+- [23/12/05] 🔥 We release the full training and evalution [model](https://huggingface.co/YanweiLi/llama-vid-7b-full-224-long-video), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), and scripts to support movie chating! 
+- [23/11/29] 🔥 LLaMA-VID is comming! We release the [paper](https://arxiv.org/abs/2311.17043), [code](https://github.com/dvlab-research/LLaMA-VID), [data](https://huggingface.co/datasets/YanweiLi/LLaMA-VID-Data), [models](https://huggingface.co/YanweiLi), and [demo](https://llama-vid.github.io/) for LLaMA-VID!
 
 ## Contents
 - [Demo](#demo)
@@ -346,11 +347,11 @@ We provide some examples in this section. More examples can be found in our [pro
 ## Citation
 If you find this repo useful for your research, please consider citing the paper
 ```
-@article{li2023llamavid,
+@inproceedings{li2024llamavid,
   title={LLaMA-VID: An Image is Worth 2 Tokens in Large Language Models},
   author={Li, Yanwei and Wang, Chengyao and Jia, Jiaya},
-  journal={arXiv preprint arXiv:2311.17043},
-  year={2023}
+  journal={European Conference on Computer Vision},
+  year={2024}
 }
 ```
 
